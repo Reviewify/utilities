@@ -3,13 +3,24 @@
 
 # Run in the directory that contains the JSON file(s)
 
-import json
+import json, os
 from pprint import pprint
 
 data = open('yelp_small.json')
 for line in data:
 	obj = json.loads(line)
-	if 'votes' in obj:
-		print obj['votes']['funny']
+	# user object
+	if 'name' in obj and 'user_id' in obj:
+		file_name = 'user-' + obj['user_id']
+	# review object
+	elif 'review_id' in obj:
+		file_name = 'review-' + obj['review_id']
+	# restaurant object
+	else:
+		file_name = 'restaurant-' + obj['business_id']
+
+	f = open(os.path.join('text_files', file_name), 'w')
+	f.write(line)
+	f.close()
 
 data.close()
