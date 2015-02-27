@@ -1,4 +1,5 @@
 import json, os, operator
+from pattern.en import pluralize, singularize
 
 directory = 'text_files'
 
@@ -16,7 +17,7 @@ for root, _, files in os.walk(directory):
         		review = obj['text']
         		review_words = review.split(' ')
         		for word in review_words:
-        			word = word.lower()
+        			word = singularize(word.lower())
         			if word in words:
         				words[word] += 1
         			else:
