@@ -6,7 +6,7 @@
 import json, os
 from pprint import pprint
 
-data = open('yelp_small.json')
+data = open('../data_sets/yelp_dataset_partial.json')
 for line in data:
 	obj = json.loads(line)
 	# user object
