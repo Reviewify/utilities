@@ -82,11 +82,11 @@ def main(argv):
 	    for f in files:   	
 	        data = open('text_files/' + f)
 	        # unncessary because its only one line
-	        for line in data:
-	        	obj = json.loads(line)
-	        	if 'review_id' in obj:
-	        		review = obj['text']
-	    			generate_frequency(flag, review, frequencies)
+	        line = data.readline()
+        	obj = json.loads(line)
+        	if 'review_id' in obj:
+        		review = obj['text']
+    			generate_frequency(flag, review, frequencies)
 	        			
 	print(sorted(calculate_percentage(frequencies, total_count).items(), key=operator.itemgetter(1)))
 
