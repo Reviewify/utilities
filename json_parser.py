@@ -3,10 +3,11 @@
 
 # Run in the directory that contains the JSON file(s)
 
-import json, os
+import json, os, re
 from pprint import pprint
 
-data = open('../data_sets/yelp_dataset_partial.json')
+#data = open('../data_sets/yelp_dataset_partial.json')
+data = open('yelp_small.json')
 for line in data:
 	obj = json.loads(line)
 	# user object
@@ -15,12 +16,14 @@ for line in data:
 	# review object
 	elif 'review_id' in obj:
 		file_name = 'review-' + obj['review_id']
+		# remove new lines and rewrite text to json object
+		new_review = obj['text'].replace('\n\n', ' ').replace('\n', ' ')
+		obj['text'] = new_review
 	# restaurant object
 	else:
 		file_name = 'restaurant-' + obj['business_id']
 
-	f = open(os.path.join('text_files', file_name), 'w')
-	f.write(line)
-	f.close()
+	with open(os.path.join('test_files', file_name), 'w') as f:
+		json.dump(obj, f)
 
 data.close()
