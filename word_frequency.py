@@ -1,5 +1,7 @@
-import json, os, operator, pickle, re
+from __future__ import division
 from pattern.en import pluralize, singularize, suggest
+import json, os, operator, pickle, re
+
 
 # open stopword list
 stopwords = pickle.load(open("stopwords/stopwords.pickle", "rb"))
@@ -22,6 +24,8 @@ def remove_stop_words(words_list):
 def clean_words_list(words_list):
 	return remove_stop_words(correct_words(lowercase_words(singularize_words(words_list))))
 
+def calculate_percentage(word_dict, total):
+	return {k: round(((v / total) * 100), 2) for k, v in word_dict.items()}
 
 def main():
 	directory = 'test_files'
@@ -41,14 +45,15 @@ def main():
 	        		review_words = re.split('\W+', review)
 	        		clean_words = clean_words_list(review_words)
 	        		for word in clean_words:
-	    				if word in words and word:
+	    				if word in words:
 	    					words[word] += 1
 	    				else:
 	    					words[word] = 1
-	    					total_count += 1
+	    				total_count += 1
 	        			
 
-	print total_count
-	print(sorted(words.items(), key=operator.itemgetter(1)))
+	#print total_count
+	#print(sorted(words.items(), key=operator.itemgetter(1)))
+	print(sorted(calculate_percentage(words, total_count).items(), key=operator.itemgetter(1)))
 
 if __name__ == "__main__": main()
