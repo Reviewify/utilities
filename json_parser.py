@@ -22,7 +22,7 @@ for line in data:
 		file_name = 'review-' + obj['review_id']
 		# remove new lines and rewrite text to json object
 		new_review = obj['text'].replace('\n\n', ' ').replace('\n', ' ')
-		review_words = correct_words(re.split('\W+', new_review))
+		review_words = re.split('\s+', new_review)
 		obj['text'] = ' '.join(review_words)
 	# restaurant object
 	else:

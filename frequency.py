@@ -1,5 +1,5 @@
 from __future__ import division
-from pattern.en import pluralize, singularize, suggest, ngrams
+from pattern.en import pluralize, singularize, suggest, ngrams, wordnet
 import json, os, operator, pickle, re, sys, getopt
 
 
@@ -50,6 +50,9 @@ def generate_ngrams(sentence, ngrams_dict, n):
 			ngrams_dict[ngram] = 1
 		total_count += 1
 	return ngrams_dict
+
+def generate_synsets(sentence, synsets_dict):
+
 
 
 def generate_frequency(flag, review, frequencies):
