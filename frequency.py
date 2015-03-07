@@ -1,6 +1,6 @@
 from __future__ import division
 from pattern.en import pluralize, singularize, suggest, ngrams, wordnet
-import json, os, operator, pickle, re, sys, getopt
+import json, os, operator, pickle, re, sys, getopt, argparse
 
 
 # open stopword list
@@ -23,8 +23,12 @@ def word_in_stopwords(word):
 def remove_stop_words(words_list):
 	return filter(word_in_stopwords, words_list)
 
+def correct_word(word):
+	if word not in stopwords:
+		return singularize(suggest(word.lower())[0][0])	
+
 def clean_words_list(words_list):
-	return remove_stop_words(correct_words(lowercase_words(singularize_words(words_list))))
+	return map(correct_word, words_list)
 
 def calculate_percentage(word_dict, total):
 	return {k: round(((v / total) * 100), 2) for k, v in word_dict.items()}
@@ -51,9 +55,6 @@ def generate_ngrams(sentence, ngrams_dict, n):
 		total_count += 1
 	return ngrams_dict
 
-def generate_synsets(sentence, synsets_dict):
-
-
 
 def generate_frequency(flag, review, frequencies):
 	if flag is 'w':
@@ -66,16 +67,9 @@ def is_number(s):
         float(s)
         return True
     except ValueError:
-        return False		
+        return False	
 
-# main accepts a flag that determines what frequency to calculate. 
-# If given a 'w', it will calculat word frequency. Any numeric flag
-# will cause it to calculate frequencies of ngrams, where n is the 
-# value of the flag
-def main(argv):
-	opts, args = getopt.getopt(argv, "ho:v", ["help", "output="])
-	flag = args[0]
-
+def execute(flag):
 	directory = 'test_files'
 	# create new dictionary
 	frequencies = {}
@@ -92,5 +86,20 @@ def main(argv):
     			generate_frequency(flag, review, frequencies)
 	        			
 	print(sorted(calculate_percentage(frequencies, total_count).items(), key=operator.itemgetter(1)))
+
+# main accepts a flag that determines what frequency to calculate. 
+# If given a 'w', it will calculat word frequency. Any numeric flag
+# will cause it to calculate frequencies of ngrams, where n is the 
+# value of the flag
+def main(argv):
+	parser = argparse.ArgumentParser(description='Generate a frequency table of ngrams')
+	parser.add_argument('n', metavar = 'n', nargs = 1, help = 'determines value of n in ngram')
+	args = parser.parse_args()
+	d = vars(args)
+	flag = d['n'][0]
+
+	execute(flag)
+
+	
 
 if __name__ == "__main__": main(sys.argv[1:])

@@ -10,6 +10,9 @@ from pattern.en import suggest
 def correct_words(words_list):
 	return [tup[0][0] for tup in map(suggest, words_list)]
 
+def lowercase_words(words_list):
+	return map(lambda x: x.lower(), words_list)
+
 data = open('../data_sets/yelp_dataset_partial.json')
 #data = open('yelp_small.json')
 for line in data:
@@ -23,7 +26,7 @@ for line in data:
 		# remove new lines and rewrite text to json object
 		new_review = obj['text'].replace('\n\n', ' ').replace('\n', ' ')
 		review_words = re.split('\s+', new_review)
-		obj['text'] = ' '.join(review_words)
+		obj['text'] = ' '.join(lowercase_words(review_words))
 	# restaurant object
 	else:
 		file_name = 'restaurant-' + obj['business_id']
