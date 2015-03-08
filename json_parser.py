@@ -13,6 +13,15 @@ def correct_words(words_list):
 def lowercase_words(words_list):
 	return map(lambda x: x.lower(), words_list)
 
+def make_directory(directory):
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+# make directory for each file type
+make_directory('text_files/restaurant')
+make_directory('text_files/review')
+make_directory('text_files/user')
+
 data = open('../data_sets/yelp_dataset_partial.json')
 #data = open('yelp_small.json')
 for line in data:
@@ -20,6 +29,8 @@ for line in data:
 	# user object
 	if 'name' in obj and 'user_id' in obj:
 		file_name = 'user-' + obj['user_id']
+		with open(os.path.join('text_files/user', file_name), 'w') as f:
+			json.dump(obj, f)
 	# review object
 	elif 'review_id' in obj:
 		file_name = 'review-' + obj['review_id']
@@ -27,11 +38,14 @@ for line in data:
 		new_review = obj['text'].replace('\n\n', ' ').replace('\n', ' ')
 		review_words = re.split('\s+', new_review)
 		obj['text'] = ' '.join(lowercase_words(review_words))
+		with open(os.path.join('text_files/review', file_name), 'w') as f:
+			json.dump(obj, f)
 	# restaurant object
 	else:
 		file_name = 'restaurant-' + obj['business_id']
+		with open(os.path.join('text_files/restaurant', file_name), 'w') as f:
+			json.dump(obj, f)
 
-	with open(os.path.join('text_files', file_name), 'w') as f:
-		json.dump(obj, f)
+	
 
 data.close()
