@@ -18,18 +18,18 @@ def make_directory(directory):
 		os.makedirs(directory)
 
 # make directory for each file type
-make_directory('text_files/restaurant')
-make_directory('text_files/review')
-make_directory('text_files/user')
+make_directory('../data_sets/yelp_dataset/restaurant')
+make_directory('../data_sets/yelp_dataset/review')
+make_directory('../data_sets/yelp_dataset/user')
 
-data = open('../data_sets/yelp_dataset_partial.json')
+data = open('../data_sets/yelp_academic_dataset.json')
 #data = open('yelp_small.json')
 for line in data:
 	obj = json.loads(line)
 	# user object
 	if 'name' in obj and 'user_id' in obj:
 		file_name = 'user-' + obj['user_id']
-		with open(os.path.join('text_files/user', file_name), 'w') as f:
+		with open(os.path.join('../data_sets/yelp_dataset/user', file_name), 'w') as f:
 			json.dump(obj, f)
 	# review object
 	elif 'review_id' in obj:
@@ -38,12 +38,12 @@ for line in data:
 		new_review = obj['text'].replace('\n\n', ' ').replace('\n', ' ')
 		review_words = re.split('\s+', new_review)
 		obj['text'] = ' '.join(lowercase_words(review_words))
-		with open(os.path.join('text_files/review', file_name), 'w') as f:
+		with open(os.path.join('../data_sets/yelp_dataset/review', file_name), 'w') as f:
 			json.dump(obj, f)
 	# restaurant object
 	else:
 		file_name = 'restaurant-' + obj['business_id']
-		with open(os.path.join('text_files/restaurant', file_name), 'w') as f:
+		with open(os.path.join('../data_sets/yelp_dataset/restaurant', file_name), 'w') as f:
 			json.dump(obj, f)
 
 	
