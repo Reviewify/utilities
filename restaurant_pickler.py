@@ -1,4 +1,4 @@
-# This script creates a pickle containing a dictionary mapping a 
+# This script creates a pickle containing a dictionary mapping a
 # business_id to a business name
 
 import pickle, os, json
